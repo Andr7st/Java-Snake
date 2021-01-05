@@ -5,6 +5,7 @@ import javax.swing.JPanel;
 
 import java.awt.Toolkit;
 import java.awt.event.*;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -18,7 +19,8 @@ public class Snake extends JFrame{
 
     ImagenSnake imagenSnake;
 
-    int  widthPoint = 10, heightPoint = 10;
+    int widthPoint  = 10; 
+    int heightPoint = 10;
 
     public Snake () {
         
@@ -35,6 +37,7 @@ public class Snake extends JFrame{
 
         snake = new Point(widht_/2, height_/2);
 
+        imagenSnake = new ImagenSnake();
         this.getContentPane().add(imagenSnake);
 
         this.setVisible(true);
@@ -47,7 +50,7 @@ public class Snake extends JFrame{
             super.paintComponent(g);
 
             g.setColor(new Color(0,0,255));
-            g.drawRect(snake.x, snake.y, widthPoint, heightPoint);
+            g.fillRect(snake.x, snake.y, widthPoint, heightPoint);
         }
     } 
 
