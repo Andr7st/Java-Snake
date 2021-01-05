@@ -2,25 +2,26 @@ package andr7st;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import java.awt.Toolkit;
 import java.awt.event.*;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Point;
-import java.awt.color.*;
 
 public class Snake extends JFrame{
 
     int widht_ = 640;
     int height_ = 480;
     Point snake;
-
+    Point comida;
     ImagenSnake imagenSnake;
-
     int widthPoint  = 10; 
     int heightPoint = 10;
+
+    long frecuencia = 20; // milisegundos
+
+    int direccion = KeyEvent.VK_LEFT;
 
     public Snake () {
         
@@ -37,10 +38,25 @@ public class Snake extends JFrame{
 
         snake = new Point(widht_/2, height_/2);
 
+        strartGame();
         imagenSnake = new ImagenSnake();
         this.getContentPane().add(imagenSnake);
 
         this.setVisible(true);
+
+        /// Iniciatr ejecusion
+        Momento momento = new Momento();
+        Thread trid = new Thread(momento);
+        trid.start();
+    }
+
+    public void strartGame() {
+        comida = new Point(200,200);
+        snake = new Point(widht_/2, height_/2);
+
+    }
+    public void actualizar() {
+        imagenSnake.repaint();
     }
 
 
@@ -51,18 +67,83 @@ public class Snake extends JFrame{
 
             g.setColor(new Color(0,0,255));
             g.fillRect(snake.x, snake.y, widthPoint, heightPoint);
+            
+            
+            g.setColor(new Color(255,0,0));
+            g.fillRect(comida.x, comida.y, widthPoint, heightPoint);
         }
-    } 
-
-
+    }
 
     public class Teclas extends KeyAdapter {
-		///@Override
+		@Override
 		public void keyPressed(KeyEvent e) {
 
             if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
                 System.exit(0);
             }
+            else if (e.getKeyCode() == KeyEvent.VK_UP) {
+                if(direccion != KeyEvent.VK_DOWN) {
+                    direccion = KeyEvent.VK_UP;
+                }
+            }
+            else if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                if(direccion != KeyEvent.VK_UP) {
+                    direccion = KeyEvent.VK_DOWN;
+                }
+            }
+            else if (e.getKeyCode() == KeyEvent.VK_LEFT) {  
+                if(direccion != KeyEvent.VK_RIGHT) {
+                    direccion = KeyEvent.VK_LEFT;
+                }
+            }
+            else if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                if(direccion != KeyEvent.VK_LEFT) {
+                    direccion = KeyEvent.VK_RIGHT;
+                }
+            }
         }
     }
+
+    public class Momento extends Thread {
+		
+		private long last = 0;
+		
+		public Momento() {
+			
+		}
+
+		public void run() {
+			while(true) {
+				if((java.lang.System.currentTimeMillis() - last) > frecuencia) {
+					//if(!gameOver) {
+
+                        if(direccion == KeyEvent.VK_RIGHT) {
+                            snake.x = snake.x + widthPoint;
+                            if(snake.x > widht_) {
+                                snake.x = 0;
+                            }
+                        } else if(direccion == KeyEvent.VK_LEFT) {
+                            snake.x = snake.x - widthPoint;
+                            if(snake.x < 0) {
+                                snake.x = widht_ - widthPoint;
+                            }                        
+                        } else if(direccion == KeyEvent.VK_UP) {
+                            snake.y = snake.y - heightPoint;
+                            if(snake.y < 0) {
+                                snake.y = height_;
+                            }                        
+                        } else if(direccion == KeyEvent.VK_DOWN) {
+                            snake.y = snake.y + heightPoint;
+                            if(snake.y > height_) {
+                                snake.y = 0;
+                            }                        
+                        }
+                   // }
+                    actualizar();
+					
+					last = java.lang.System.currentTimeMillis();
+				}
+			}
+		}
+	}
 }
