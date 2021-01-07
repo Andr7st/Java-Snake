@@ -12,8 +12,8 @@ import java.awt.Graphics;
 import java.awt.Point;
 
 public class Snake extends JFrame{ private static final long serialVersionUID = 1L;
-    int widht_ = 640;
-    int height_ = 480;
+    int anchura = 640; //640
+    int altura = 480; //480
     Point snake;
     Point comida;
     ImagenSnake imagenSnake;
@@ -21,7 +21,7 @@ public class Snake extends JFrame{ private static final long serialVersionUID = 
 
     boolean gameOver = false;
 
-    int widthPoint  = 10; 
+    int widthPoint  = 10;
     int heightPoint = 10;
 
     long frecuencia = 25; // milisegundos
@@ -29,24 +29,38 @@ public class Snake extends JFrame{ private static final long serialVersionUID = 
     int direccion = KeyEvent.VK_LEFT;
 
     public Snake () {
+
+/*         JPanel p = new JPanel();
+        p.setBackground(new Color(124,45,82));
+        p.setBounds(0, 0,   640, 110);
+        p.setLayout(null); 
+ */
+
         
         this.setTitle("Snake | Andr7st");
         this.addKeyListener(new Teclas());
 
-        this.setSize(widht_,height_);
+
+        this.setSize(anchura,altura);
 
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         // this.setLocationRelativeTo(null);
-        this.setLocation(dim.width/2-widht_/2, dim.height/2-height_/2);
+        this.setLocation(dim.width/2-anchura/2, dim.height/2-altura/2);
         
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //this.setResizable(false);
+        //JFrame.setDefaultLookAndFeelDecorated(false);
+        //this.add(p);
 
-        snake = new Point(widht_/2, height_/2);
-
-        strartGame();
+        snake = new Point((anchura/2), (altura/2));
         imagenSnake = new ImagenSnake();
         this.getContentPane().add(imagenSnake);
+       // p.add(imagenSnake);
+        imagenSnake.setBackground(new Color(25,25,25));
 
+        strartGame();
+
+    //    imagenSnake.setBackground(Color.GRAY);
         this.setVisible(true);
 
         /// Iniciatr ejecusion
@@ -56,8 +70,10 @@ public class Snake extends JFrame{ private static final long serialVersionUID = 
     }
 
     public void strartGame() {
-        comida = new Point(200,200);
-        snake = new Point(widht_/2, height_/2);
+
+        comida = new Point(120,120);
+
+        //snake = new Point(anchura/2, altura/2);
 
         lista = new ArrayList<Point>();
         //lista.add(snake);
@@ -67,8 +83,8 @@ public class Snake extends JFrame{ private static final long serialVersionUID = 
     public void crearComida() {
         Random rdm = new Random();
 
-        comida.x = rdm.nextInt(widht_);
-        comida.y = rdm.nextInt(height_);
+        comida.x = rdm.nextInt(anchura);
+        comida.y = rdm.nextInt(altura);
         
         ////// x
         if((comida.x % 5) > 0 ) {
@@ -88,6 +104,7 @@ public class Snake extends JFrame{ private static final long serialVersionUID = 
 
     }
     public void actualizar() {
+        
         imagenSnake.repaint();
 
         lista.add(0, new Point(snake.x,snake.y));
@@ -116,7 +133,7 @@ public class Snake extends JFrame{ private static final long serialVersionUID = 
         public void paintComponent(Graphics g) {
             super.paintComponent(g);
 
-            g.setColor(new Color(0,0,255));
+            g.setColor(new Color(220,220,220));
 
             g.fillRect(snake.x, snake.y, widthPoint, heightPoint);
 
@@ -127,7 +144,7 @@ public class Snake extends JFrame{ private static final long serialVersionUID = 
                 g.fillRect(point.x, point.y, widthPoint, heightPoint);
             }
             
-            g.setColor(new Color(255,0,0));
+            g.setColor(new Color(186,67,194));
             g.fillRect(comida.x, comida.y, widthPoint, heightPoint);
 
             if(gameOver) {
@@ -179,22 +196,22 @@ public class Snake extends JFrame{ private static final long serialVersionUID = 
 
                         if(direccion == KeyEvent.VK_RIGHT) {
                             snake.x = snake.x + widthPoint;
-                            if(snake.x > widht_) {
+                            if(snake.x > anchura) {
                                 snake.x = 0;
                             }
                         } else if(direccion == KeyEvent.VK_LEFT) {
                             snake.x = snake.x - widthPoint;
                             if(snake.x < 0) {
-                                snake.x = widht_ - widthPoint;
+                                snake.x = anchura - widthPoint;
                             }                        
                         } else if(direccion == KeyEvent.VK_UP) {
                             snake.y = snake.y - heightPoint;
                             if(snake.y < 0) {
-                                snake.y = height_;
+                                snake.y = altura;
                             }                        
                         } else if(direccion == KeyEvent.VK_DOWN) {
                             snake.y = snake.y + heightPoint;
-                            if(snake.y > height_) {
+                            if(snake.y > altura) {
                                 snake.y = 0;
                             }                        
                         }
